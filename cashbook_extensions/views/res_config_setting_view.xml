@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="res_config_settings_view_form_inherit" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.account</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="1"/>
+        <field name="inherit_id" ref="account.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div/field[@name='has_accounting_entries']" position="after">
+            <t groups="account.group_account_user">
+                <h2>Cashbook</h2>
+                <div class="row mt16 o_settings_container">
+                    <div class="col-xs-12 col-md-6 o_setting_box">
+                        <div class="o_setting_left_pane">
+                            <field name="is_credit"/>
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <label string='Is Credit'/>
+                            <div class="text-muted">
+                                Deactivate is Debit in cashbook.
+                            </div>
+                            <div class="row mt16">
+                                <label string="Opening Balance" for="opening_balance" class="col-md-3 o_light_label"/>
+                                <field name="opening_balance"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+            </xpath>
+        </field>
+    </record>
+    </data>
+</odoo>

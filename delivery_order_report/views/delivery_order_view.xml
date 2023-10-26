@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="view_delivery_order_tree" model="ir.ui.view">
+            <field name="name">deliver.order.tree</field>
+            <field name="model">delivery.order</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <tree string="Delivery Order Reports" create="false">
+                    <field name="date"/>
+                    <field name="do_number"/>
+                    <field name="product_id"/>
+                    <field name="location_id"/>
+                    <field name="location_dest_id"/>
+                    <field name="partner_id"/>
+                    <field name="backorder_id"/>
+                    <field name="product_qty"/>
+                    <field name="onhand_qty"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_delivery_delivery_filter" model="ir.ui.view">
+            <field name="name">delivery.order.search</field>
+            <field name="model">delivery.order</field>
+            <field name="arch" type="xml">
+                <search string="Delivery Order Reports">
+                    <field name="date" string="Date"/>
+                    <field name="do_number" string="Reference No"/>
+                    <field name="product_id" string="Product" filter_domain="['|','|',('product_id.default_code','ilike',self),('product_id.name','ilike',self),('product_id.barcode','ilike',self)]"/>
+                    <field name="partner_id" string="Customer"/>
+                    <field name="location_id" string="Source Location"/>
+                    <field name="location_dest_id" string="Destination Location"/>
+                    <field name="state" string="Status"/>
+                    <field name="backorder_id" string="Backorder No"/>
+                    <group expand="0" string="Group By">
+                        <filter name="do_number" string="DO Number" domain="[]" context="{'group_by':'do_number'}"/>
+                        <filter name="partner_id" string="Customer" domain="[]" context="{'group_by':'partner_id'}"/>
+                        <filter name="state" string="Status" domain="[]" context="{'group_by':'state'}"/>
+                    </group>
+                </search>
+             </field>
+         </record>
+    
+        <record id="action_delivery_order" model="ir.actions.act_window">
+	        <field name="name">Delivery Order Reports</field>
+	        <field name="type">ir.actions.act_window</field>
+	        <field name="res_model">delivery.order</field>
+	        <field name="view_type">form</field>
+	        <field name="view_mode">tree,kanban,form</field>	        
+	        <field name="search_view_id" ref="view_delivery_delivery_filter" />
+	        <field name="domain">[]</field>
+	        <field name="help" type="html">
+	            <p class="oe_view_nocontent_create">
+	                    Delivery Order Reports.
+                </p>
+	        </field>
+    	</record>
+
+		<menuitem action="action_delivery_order" id="menu_delivery_order" parent="stock.menu_warehouse_report" sequence="151"/>
+</odoo>

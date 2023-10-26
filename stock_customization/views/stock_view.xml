@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>  	
+    	<record id="view_picking_form_inherit" model="ir.ui.view">
+            <field name="name">stock.picking.form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field eval="12" name="priority"/>
+            <field name="arch" type="xml">
+            	<xpath expr="//field[@name='move_lines']/tree/field[@name='product_uom_qty']" position="replace">
+                	<field name="product_uom_qty" string="Initial Demand"/>    
+            	</xpath>
+            	<xpath expr="//field[@name='move_lines']/tree/field[@name='product_uom']" position="after">
+                	<field name="no_of_ctn" attrs="{'readonly': ['|', ('state', 'in', ('done', 'cancel'))]}"/>    
+            	</xpath>
+            	<xpath expr="//field[@name='move_lines']" position="after">
+            		<div class="oe_subtotal_footer_separator oe_inline o_td_label oe_right">
+                        <label for="total_of_ctn" /><field name="total_of_ctn" string="Total No.Ctn: "/> 
+                    </div>  
+            	</xpath>
+            	
+            </field>
+        </record>
+</odoo>

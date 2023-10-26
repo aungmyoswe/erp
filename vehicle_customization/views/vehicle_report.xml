@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>        
+
+        <report
+            id="vehicle_invoice_report"
+            model="vehicle.invoice"
+            string="Vehicle Invoice"
+            report_type="qweb-pdf"
+            name="vehicle_customization.report_vehicle"
+            file="vehicle_customization.report_vehicle"
+            print_report_name="'Vehicle Invoice - %s' % (object.name)"
+        />       
+
+    </data>
+</odoo>

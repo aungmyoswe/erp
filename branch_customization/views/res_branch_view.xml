@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_branch_form" model="ir.ui.view">
+            <field name="name">res.branch.form</field>
+            <field name="model">res.branch</field>
+            <field name="arch" type="xml">
+                <form string="Branch">
+                  <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <div>
+                        <group>
+                            <field name="code"/>
+                            <field name="company_id"/>
+                            <field name="address_in_english" placeholder="Address in English..."/>
+                            <field name="address_in_myanmar" placeholder="Address in Myanmar..."/>
+                        </group>
+                    </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="view_branch_tree" model="ir.ui.view">
+            <field name="name">res.branch.tree</field>
+            <field name="model">res.branch</field>
+            <field name="arch" type="xml">
+                <tree string="Branches">
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="company_id"/>
+                     <field name="address_in_english"/>
+                    <field name="address_in_myanmar"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="branch_normal_action_tree" model="ir.actions.act_window">
+            <field name="name">Branches</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.branch</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('id','=',active_id)]</field>
+        </record>
+        <record id="action_res_branch_form" model="ir.actions.act_window">
+            <field name="name">Branches</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.branch</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help">Create and manage the branches that will be managed by Odoo from here. Shops or subsidiaries can be created and maintained from here.</field>
+        </record>
+        <menuitem action="action_res_branch_form" id="menu_action_res_branch_form" parent="base.menu_users"/>
+
+    </data>
+</odoo>

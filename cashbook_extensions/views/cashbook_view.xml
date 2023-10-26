@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+    <record id="view_cashbook_form" model="ir.ui.view">
+    <field name="name">cash.book.form</field>
+    <field name="model">cash.book</field>
+    <field name="arch" type="xml">
+        <form>
+            <sheet>
+                <group>
+                    <group>
+                        <field name="name"/>
+                        <field name="is_debit" invisible='1'/>
+                        <field name="is_opening_debit" invisible="1"/>
+                        <field name="is_closing_debit" invisible="1"/>
+                    </group>
+                    <group>
+                        <field name="currency_id"/>
+                    </group>
+                </group>
+                    <notebook>
+                        <page name="cashbook" string="CashBook Item">
+                            <group class="oe_subtotal_footer oe_right" colspan='4' name="sale_total">
+                                <group class="oe_subtotal_footer oe_right">
+                                        <field name="opening_balance"  widget="monetary" options="{'currency_field': 'currency_id'}" attrs="{'invisible':[('is_opening_debit','=',True)]}"/>
+                                </group>
+                                <group class="oe_subtotal_footer oe_right">
+                                    <field name="opening_balance"  widget="monetary" options="{'currency_field': 'currency_id'}" attrs="{'invisible':[('is_opening_debit','=',False)]}"/>
+                                </group>
+                            </group>
+                            <field name="cashbook_line" readonly='1'>
+                                <tree editable="bottom" create='false' edit='false' delete='false'>
+                                    <field name="date"/>
+                                    <field name="move_id"/>
+                                    <field name="journal_id"/>
+                                    <field name="name"/>
+                                    <field name="ref"/>
+                                    <field name="partner_id"/>
+                                    <field name="account_id"/>
+                                    <field name="debit" />
+                                    <field name="credit"/>
+                                </tree>
+                            </field>
+                             <group class="oe_subtotal_footer oe_right" colspan='4' name="sale_total">
+                                <group style="font-size:15px;">
+                                    <label for="debit_total" String="" invisible="1"/>
+                                    <label for="debit_total" String="Daily Total"/>
+                                    <label for="daily_balance" String="" invisible="1"/>
+                                    <label for="daily_balance" String="Daily Balance"/>
+                                    <label for="total_debit" Sting="" invisible="1"/>
+                                    <label for="total_debit" Sting="Total"/>
+                                    <label for="closing_balance" invisible="1"/>
+                                    <label for="closing_balance" string="Closed"/>
+                                </group>
+                                <group  colspan="2"  class="oe_subtotal_footer oe_right">
+                                    <field name="debit_total" widget="monetary" nolabel="1" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="credit_total" widget="monetary" nolabel="1"  options="{'currency_field': 'currency_id'}"/>
+                                    <field name="daily_balance"  widget="monetary" nolabel="1" options="{'currency_field': 'currency_id'}" attrs="{'invisible':[('is_debit','=',False)]}"/>
+                                    <field name="daily_balance"  widget="monetary" nolabel="1" options="{'currency_field': 'currency_id'}" attrs="{'invisible':[('is_debit','=',True)]}"/>
+                                    <field name="total_debit" nolabel="1"  widget="monetary" options="{'currency_field': 'currency_id'}" />
+                                    <field name="total_credit" nolabel="1"  widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="closing_balance" nolabel="1"  widget="monetary" options="{'currency_field': 'currency_id'}" attrs="{'invisible':[('is_closing_debit','=',False)]}"/>
+                                    <field name="closing_balance" nolabel="1"  widget="monetary" options="{'currency_field': 'currency_id'}" attrs="{'invisible':[('is_closing_debit','=',True)]}"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_cashbook_tree" model="ir.ui.view">
+        <field name="name">cash.book.tree</field>
+        <field name="model">cash.book</field>
+        <field name="arch" type="xml">
+            <tree string="account cashbook">
+                <field name="name"/>
+                <field name="opening_balance"/>
+                <field name="debit_total" string="Total Debit" sum="Daily Total"/>
+                <field name="credit_total" string="Total Credit" sum="Credit Daily Total"/>
+                <field name="daily_balance" string="Daily Balance" sum="Daily Balance"/>
+                <field name="total_debit" string="Total(debit)" sum="Total"/>
+                <field name="total_credit" string="Total(credit)" sum="Total Credit"/>
+                <field name="closing_balance"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_cashbook_filter" model="ir.ui.view">
+        <field name="name">cash.book.filter</field>
+        <field name="model">cash.book</field>
+        <field name="arch" type="xml">
+            <search string="cashbook">
+                <group expand="0" string="Group By">
+                    <!-- <filter name="name" string="Day" domain="[]" context="{'group_by':'name:day'}"/> -->
+                    <filter name="name" string="Month" domain="[]" context="{'group_by':'name:month'}"/>
+                    <filter name="name" string="Year" domain="[]" context="{'group_by':'name:year'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_cashbooks">
+        <field name="name">Cashbook</field>
+        <field name="res_model">cash.book</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form,tree</field>
+        <field name="view_id" ref="view_cashbook_tree"/>
+    </record>
+    <menuitem
+        name="CashBoook"
+        id="menu_cashbook"
+        action='action_cashbooks'
+        parent="account.menu_finance_entries_accounting_entries" groups="account.group_account_manager"/>
+
+    </data>
+</odoo>

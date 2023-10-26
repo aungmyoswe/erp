@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_invoice_document">
+            <t t-call="branch_customization.external_layout">
+                <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)" />
+                <div class="page">
+                    <style type="text/css">
+                        @font-face {
+                        font-family: 'Zawgyi-One';
+                        src: local('Zawgyi-One'), local('Zawgyi-One'),
+                        url(/branch_customization/static/src/font/Zawgyi-One-20051130.ttf) format('truetype');
+                        }
+
+                        .h1-title {
+                        font-family: Zawgy-One;
+                        }
+                    </style>
+                    <div style="position:absolute;opacity:0.06;z-index:1000;transform:rotate(300deg);-webkit-transform:rotate(300deg);width:150%;">
+                        <p style="font-size:57px;">Shwe Myanmar Iron Trading</p>
+                    </div>
+                    <div class="row" style="font-size:22px;">
+                        <div t-if="o.branch_id.address_in_myanmar" class="col-xs-6">
+                            <p t-field="o.branch_id.address_in_myanmar"/>
+                        </div>
+                        <div t-if="o.branch_id.address_in_english" class="col-xs-6">
+                            <p t-field="o.branch_id.address_in_english"/>
+                        </div>
+                    </div>
+
+                    <h2>
+                        <span t-if="o.type == 'out_invoice' and (o.state == 'open' or o.state == 'paid')">Invoice</span>
+                        <span t-if="o.type == 'out_invoice' and o.state == 'draft'">Draft Invoice</span>
+                        <span t-if="o.type == 'out_invoice' and o.state == 'cancel'">Cancelled Invoice</span>
+                        <span t-if="o.type == 'out_refund'">Credit Note</span>
+                        <span t-if="o.type == 'in_refund'">Vendor Credit Note</span>
+                        <span t-if="o.type == 'in_invoice'">Vendor Bill</span>
+                        <span t-field="o.number"/>
+                    </h2>
+
+                    <div class="row mt32 mb32" style="font-size:22px;">
+                        <div class="col-xs-6" t-if="o.partner_id">
+                            <strong>Customer Name:</strong>
+                            <p t-field="o.partner_id"/>
+                        </div>
+                        <div class="col-xs-6" t-if="o.date_invoice">
+                            <strong>Invoice Date:</strong>
+                            <p t-field="o.date_invoice"/>
+                        </div>
+                        <div class="col-xs-6" t-if="o.partner_id">
+                            <strong>Address:</strong><br></br>
+                            <span t-field="o.partner_id.street"/><span t-field="o.partner_id.street2"/><span t-field="o.partner_id.city"/>
+                            <br></br><span t-field="o.partner_id.state_id"/><span t-field="o.partner_id.country_id"/>
+                        </div>
+                        <div class="col-xs-6" t-if="o.partner_id.phone">
+                            <strong>Phone No:</strong>
+                            <p t-field="o.partner_id.phone"/>
+                        </div>
+                    </div>
+
+                    <!-- Is there a discount on at least one line? -->
+                    <t t-set="display_discount" t-value="any([l.discount for l in o.invoice_line_ids])"/>
+
+                    <table class="table table-condensed" name="invoice_line_table" style="font-size:22px;">
+                        <thead style="border: 2px solid #000000;">
+                            <tr rowspan="2">
+                                <th style="border: 2px solid #000000;width:10%;">No.<br/>(စဥ္)</th>
+                                <th style="border: 2px solid #000000;width:30%">Particular <br/> (အမ်ဳိးအမည္)</th>
+                                <th style="border: 2px solid #000000;width;20%;" class="text-right">Quantity <br/> (ဦးေရ)</th>
+                                <th style="border: 2px solid #000000;width:15%;" class="text-right">Unit Price <br/> (နွုန္း)</th>
+                                <th  style="border: 2px solid #000000;width:10%;" t-if="display_discount" class="text-right">Disc.(%)</th>
+                                <th style="border: 2px solid #000000;width:15%;" class="text-right">Amount <br/> (သင့္ေငြ)</th>
+                            </tr>                            
+                        </thead>
+                        <tbody class="invoice_tbody" style="border: 2px solid #000000;">
+                            <t t-set="i" t-value="1" />
+                            <tr t-foreach="o.invoice_line_ids" t-as="l">
+                                <td style="border-left: 2px solid #000000;border-right: 2px solid #000000;" class="text-center"> <span t-esc="i"/></td>
+    								<t t-set="i" t-value="i+1"/>
+                                <td style="border-right: 2px solid #000000;"><span t-field="l.name"/></td>
+                                <td style="border-right: 2px solid #000000;" class="text-right">
+                                    <span t-field="l.quantity"/>
+                                    <span t-field="l.uom_id"  groups="product.group_uom"/>
+                                </td>
+                                <td style="border-right: 2px solid #000000;" class="text-right">
+                                    <span t-field="l.price_unit"/>
+                                </td>
+                                <td style="border-right: 2px solid #000000;" t-if="display_discount" class="text-right">
+                                    <span t-field="l.discount"/>
+                                </td>
+                                <td style="border-right: 2px solid #000000;" class="text-right" id="subtotal">
+                                    <span t-field="l.price_subtotal"
+                                        t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="clearfix" >
+                        <div id="total" class="row">
+                            <div class="col-xs-6 pull-right">
+                                <table class="table table-condensed" style="min-width: 250px;max-width: 400px;font-size:22px;">
+                                    <t t-foreach="o._get_tax_amount_by_group()" t-as="amount_by_group">
+                                        <tr style="border-bottom:1px solid #dddddd;">
+                                            <t t-if="len(o.tax_line_ids) == 1 and o.amount_untaxed == amount_by_group[2]">
+                                                <td><span t-esc="amount_by_group[0]"/></td>
+                                                <td class="text-right">
+                                                    <span t-esc="amount_by_group[3]" />
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td>
+                                                    <span t-esc="amount_by_group[0]"/>
+                                                    <span>&amp;nbsp;<span>on</span>
+                                                        <t t-esc="amount_by_group[4]"/>
+                                                    </span>
+                                                </td>
+                                                <td class="text-right">
+                                                    <span t-esc="amount_by_group[3]"/>
+                                                </td>
+                                            </t>
+                                        </tr>
+                                    </t>
+
+                                    <tr class="border-black">
+                                        <td><strong>Total/စုစုေပါင္း </strong></td>
+                                        <td class="text-right">
+                                            <span t-field="o.amount_total" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-black">
+                                        <t t-set="payments_vals" t-value="o._get_payments_vals()"/>
+                                        <t t-if="len(payments_vals) > 1">
+                                            <t t-if="o.residual > 0.0">
+                                                    <tr class="border-black">
+                                                        <td><strong>Advanced/စရန္ေငြ    </strong></td>
+                                                        <td class="text-right">
+                                                            <span t-esc="payments_vals[0]['amount']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                <!--                                            <span t-field="o.adv_amt" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>-->
+                                                        </td>
+                                                    </tr>
+                                            </t>
+                                        </t>
+                                        <t t-if="len(payments_vals) == 1">
+                                            <t t-foreach="payments_vals" t-as="payment_vals">
+                                                <tr class="border-black">
+                                                    <td><strong>Advanced/စရန္ေငြ    </strong></td>
+                                                    <td class="text-right">
+                                                        <span t-esc="payment_vals['amount']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+            <!--                                            <span t-field="o.adv_amt" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>-->
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </t>
+
+                                    </tr>
+                                    <tr class="border-black">
+                                        <td><strong>Balance/လက္က်န္ေငြ </strong></td>
+                                        <td class="text-right">
+                                            <span t-field="o.residual" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+			<div class="row" style="padding-top:22px;font-size:22px;">
+		             	<div class="col-xs-6">
+		                	<strong>Signature(Saleperson): </strong><br/>
+                            		<p>............................................................</p>
+		                </div>
+                            	<div class="col-xs-6">
+                            		<strong>Signature:</strong><br/>
+		                    	<p>............................................................</p>
+		                </div>
+            		</div>
+                    
+                 </div>
+            </t>
+        </template>
+
+        <template id="report_invoice_document_with_payments" inherit_id="branch_customization.report_invoice_document" primary="True">
+            <xpath expr="//div[@id='total']/div/table" position="inside">
+                <t t-set="payments_vals" t-value="o._get_payments_vals()"/>
+                <t t-foreach="payments_vals" t-as="payment_vals">
+                    <tr>
+                        <td>
+                            <i class="oe_form_field text-right oe_payment_label">Paid on <t t-esc="payment_vals['date']"/></i>
+                        </td>
+                        <td class="text-right">
+                            <span t-esc="payment_vals['amount']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                        </td>
+                    </tr>
+                </t>
+                <t t-if="len(payments_vals) > 0">
+                    <tr class="border-black">
+                        <td><strong>Amount Due/လက္က်န္ေငြ</strong></td>
+                        <td class="text-right">
+                             <span t-field="o.residual" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                        </td>
+                    </tr>
+                </t>
+            </xpath>
+        </template>
+
+        <template id="report_invoice">
+            <t t-call="branch_customization.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="branch_customization.report_invoice_document" t-lang="o.partner_id.lang"/>
+                </t>
+            </t>
+        </template>
+
+        <template id="report_invoice_with_payments">
+            <t t-call="branch_customization.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="branch_customization.report_invoice_document_with_payments" t-lang="o.partner_id.lang"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

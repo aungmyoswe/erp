@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_foc_move_line,foc.move.line,model_foc_move_line,base.group_user,1,1,1,0
+access_foc_move_line_manager,foc.move.line,model_foc_move_line,base.group_erp_manager,1,1,1,1
+access_delivery_move_line,delivery.move.line,model_delivery_move_line,base.group_user,1,1,1,0
+access_delivery_move_line_manager,delivery.move.line,model_delivery_move_line,base.group_erp_manager,1,1,1,1

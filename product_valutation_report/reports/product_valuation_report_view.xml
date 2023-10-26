@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+         <report
+            id="report_valuation_report"
+            string="Print Transfer Report"
+            model="stock.move.line"
+            report_type="qweb-pdf"
+            paperformat="product_valutation_report.paperformat_a4_clears"
+            name="product_valutation_report.report_stock_move_line"
+            file="product_valutation_report.report_stock_move_line"
+            print_report_name="'Product Transfer Report- %s' % (object.name)"
+         />
+    </data>
+</odoo>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_stock_move_line">
+            <t t-call="web.basic_layout">
+                 <div class="page">
+                    <div class="col-xs-12" style="padding:0;">
+                        <table class="table" style="width:100%;padding:10px;">
+                            <thead>
+                                <tr style="padding:10px;">
+                                    <th style="width:16%;">
+                                        <strong>Brand</strong>
+                                    </th>
+                                    <th style="width:17%;">
+                                        <strong>Internal Category</strong>
+                                    </th>
+                                    <th style="width:30%;">
+                                        <strong>Product Name</strong>
+                                    </th>
+                                    <th class="text-right" style="width:10%;">
+                                        <strong>DO QTY</strong>
+                                    </th>
+                                    <th class="text-right" style="width:13%;">
+                                        <strong>Internal QTY</strong>
+                                    </th>
+                                    <th class="text-right" style="width:20%;">
+                                        <strong>Total</strong>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <t t-foreach="res" t-as="sml">
+                                <t t-set="product" t-value="sml"/>
+                                <tr style="width: 1in;">
+                                    <t t-foreach="product" t-as="p">
+                                        <t t-if="p">
+                                            <t t-if="p=='doqty'">
+                                                <td class="text-right">
+                                                    <t t-esc="p_value"></t>
+                                                </td>
+                                            </t>
+                                            <t t-elif="p=='internalqty'">
+                                                <td class="text-right">
+                                                    <t t-esc="p_value"></t>
+                                                </td>
+                                            </t>
+                                            <t t-elif="p=='total'">
+                                                <td class="text-right">
+                                                    <t t-esc="p_value"></t>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td>
+                                                    <t t-esc="p_value"></t>
+                                                </td>
+                                            </t>
+                                        </t>
+                                        <t t-else="">
+                                            <td></td>
+                                        </t>
+                                    </t>                                       
+                                </tr>
+                            </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>

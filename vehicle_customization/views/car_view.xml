@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>  	
+    	
+        <record id="view_car_tree" model="ir.ui.view">
+            <field name="name">car.tree</field>
+            <field name="model">res.car</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <tree string="Car">                    
+                    <field name="name"/>                    
+                </tree>
+            </field>
+        </record>    
+
+        <record id="view_car_form" model="ir.ui.view">
+            <field name="name">Car</field>
+            <field name="model">res.car</field>
+            <field name="arch" type="xml">
+                <form string="Car">                
+	                <sheet>          
+	                    <group> 
+	                    		<field name="name"/>	                    		
+	                    </group>                   
+	                </sheet>                
+                </form>
+            </field>
+        </record>		
+
+        <record id="view_car_search" model="ir.ui.view">
+	        <field name="name">car.search.view</field>
+	        <field name="model">res.car</field>
+	        <field name="arch" type="xml">
+	            <search string="Car Search">
+	                <field name="name"/>
+	            </search>
+	        </field>
+    	</record>
+    
+        <record id="action_car" model="ir.actions.act_window">
+	        <field name="name">Car</field>
+	        <field name="type">ir.actions.act_window</field>
+	        <field name="res_model">res.car</field>
+	        <field name="view_type">form</field>
+	        <field name="view_mode">tree,kanban,form</field>	        
+	        <field name="search_view_id" ref="view_car_search" />
+	        <field name="domain">[]</field>
+	        <field name="help" type="html">
+	            <p class="oe_view_nocontent_create">
+	                    Create car, the first step of creating car.
+	                </p><p>
+	                    Once a car is created, it can be used in Delivery System.
+	                </p>
+	        </field>
+    	</record>
+    	
+    	<menuitem id="menu_car_root" name="Cars" action="action_car" parent="stock.menu_stock_inventory_control" sequence="10"/>
+
+</odoo>

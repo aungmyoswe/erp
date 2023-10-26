@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="product_template_form_view_inherit_extension" model="ir.ui.view">
+        <field name="name">product.template.common.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook/page/group/group[2]/field[@name='uom_po_id']" position="after">
+                <field name="product_uom_ids" widget ="many2many_tags" string="Relation" groups="product.group_uom">
+                </field>
+            </xpath>
+            <xpath expr="//notebook/page/group/group[2]/field[@name='uom_po_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>                                    
+        </field>
+    </record>
+     <record id="view_picking_form_inherit_extension" model="ir.ui.view">
+            <field name="name">stock.picking.form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock_customization.view_picking_form_inherit"/>
+            <field name="arch" type="xml">
+               	<xpath expr="//field[@name='move_lines']/tree/field[@name='no_of_ctn']" position="before">
+                    <field name="product_uom_re_id" string="Relation" force_save="1"/>
+                </xpath>                                
+        </field>
+    </record>
+</odoo>
+

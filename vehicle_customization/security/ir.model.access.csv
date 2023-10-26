@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_vehicle_invoice,vehicle.invoice,model_vehicle_invoice,base.group_user,1,1,1,1
+access_vehicle_invoice_line,vehicle.invoice.line,model_vehicle_invoice_line,base.group_user,1,1,1,1
+access_res_car,res.car,model_res_car,base.group_user,1,1,1,1
+access_res_driver,res.driver,model_res_driver,base.group_user,1,1,1,1
+access_delivery_select_wizard,delivery.select.wizard,model_delivery_select_wizard,base.group_user,1,1,1,1
+access_delivery_delivery,delivery.delivery,model_delivery_delivery,base.group_user,1,1,1,1
